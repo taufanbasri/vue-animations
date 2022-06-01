@@ -4,7 +4,8 @@
     <button @click="animateBlock">Animate</button>
   </div>
   <div class="container">
-    <transition name="para" @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter" @before-leave="beforeLeave" @leave="leave" @after-leave="afterLeave">
+    <transition name="para" @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter"
+      @before-leave="beforeLeave" @leave="leave" @after-leave="afterLeave" @enter-cancelled="enterCancell" @leave-cancelled="leaveCancell">
       <p v-if="paragraphIsVisible">This is only sometimes visible...</p>
     </transition>
     <button @click="toggleParagraph">Toggle Paragraph</button>
@@ -31,17 +32,32 @@ export default {
       animatedBlock: false,
       dialogIsVisible: false,
       paragraphIsVisible: false,
-      usersAreVisible: false
+      usersAreVisible: false,
+      enterInterval: null,
+      leaveInterval: null
     };
   },
   methods: {
     beforeEnter(el) {
       console.log('beforeEnter');
       console.log(el);
+      el.style.opacity = 0
     },
-    enter(el) {
+    enter(el, done) {
       console.log('enter');
       console.log(el);
+
+      let round = 1
+
+      this.enterInterval = setInterval(() => {
+        el.style.opacity = round * 0.01
+        round++
+
+        if (round > 100) {
+          clearInterval(this.enterInterval)
+          done()
+        }
+      }, 20);
     },
     afterEnter(el) {
       console.log('afterEnter');
@@ -50,14 +66,40 @@ export default {
     beforeLeave(el) {
       console.log('beforeLeave');
       console.log(el);
+
+      el.style.opacity = 1
     },
-    leave(el) {
+    leave(el, done) {
       console.log('leave');
       console.log(el);
+
+      let round = 1
+
+      this.leaveInterval = setInterval(() => {
+        el.style.opacity = 1 - (round * 0.01)
+        round++
+
+        if (round > 100) {
+          clearInterval(this.leaveInterval)
+          done()
+        }
+      }, 20);
     },
     afterLeave(el) {
       console.log('afterLeave');
       console.log(el);
+    },
+    enterCancell(el) {
+      console.log('enterCancell');
+      console.log(el);
+
+      clearInterval(this.enterInterval)
+    },
+    leaveCancell(el) {
+      console.log('leaveCancell');
+      console.log(el);
+
+      clearInterval(this.leaveInterval)
     },
     showUsers() {
       this.usersAreVisible = true
@@ -133,14 +175,6 @@ button:active {
 .animate {
   /* transform: translateX(-150px); */
   animation: slide-fade 0.3s ease-out forwards;
-}
-
-.para-enter-active {
-  animation: slide-fade 0.3s ease-out;
-}
-
-.para-leave-active {
-  animation: slide-fade 0.3s ease-out;
 }
 
 .fade-button-enter-from,
