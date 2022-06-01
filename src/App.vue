@@ -4,7 +4,7 @@
     <button @click="animateBlock">Animate</button>
   </div>
   <div class="container">
-    <transition name="para" @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter"
+    <transition :css="false" @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter"
       @before-leave="beforeLeave" @leave="leave" @after-leave="afterLeave" @enter-cancelled="enterCancell" @leave-cancelled="leaveCancell">
       <p v-if="paragraphIsVisible">This is only sometimes visible...</p>
     </transition>
