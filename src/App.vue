@@ -98,32 +98,12 @@ button:active {
   animation: slide-fade 0.3s ease-out forwards;
 }
 
-.v-enter-from {
-  opacity: 0;
-  transform: translateY(-30px);
-}
-
 .v-enter-active {
-  transition: all 0.3s ease-out;
-}
-
-.v-enter-to {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.v-leave-from {
-  opacity: 1;
-  transform: translateY(0);
+  animation: slide-fade 0.3s ease-out;
 }
 
 .v-leave-active {
-  transition: all 0.3s ease-in;
-}
-
-.v-leave-to {
-  opacity: 0;
-  transform: translateY(30px);
+  animation: slide-fade 0.3s ease-out;
 }
 
 @keyframes slide-fade {
